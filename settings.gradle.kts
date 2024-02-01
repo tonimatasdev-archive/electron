@@ -4,6 +4,6 @@ pluginManagement {
     }
 }
 
-include("api", "server")
+include("api", "server", "controller")
 
 rootProject.name = "DiscordMK"

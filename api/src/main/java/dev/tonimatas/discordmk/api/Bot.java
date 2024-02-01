@@ -4,7 +4,7 @@ import java.io.File;
 
 // TODO: Add 1000 lines
 public class Bot {
-    private String filePath;
+    protected String filePath;
     
     public Bot(File filePath) {
         this.filePath = filePath.getPath();
