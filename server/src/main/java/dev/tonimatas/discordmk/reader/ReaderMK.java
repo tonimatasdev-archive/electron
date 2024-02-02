@@ -25,9 +25,10 @@ public class ReaderMK {
         }
         
         String token = jsonObject.get("token").getAsString();
+        String name = jsonObject.get("name").getAsString();
         
 
         // Create all read logic
-        return new Bot(token);
+        return new Bot(token, name);
     }
 }
