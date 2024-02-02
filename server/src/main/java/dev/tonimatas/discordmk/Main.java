@@ -3,6 +3,8 @@ package dev.tonimatas.discordmk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.tonimatas.discordmk.api.Bot;
+import dev.tonimatas.discordmk.console.ConsoleThread;
+import dev.tonimatas.discordmk.console.LoggerMK;
 import dev.tonimatas.discordmk.reader.ReaderMK;
 
 import java.io.File;
@@ -13,6 +15,7 @@ import java.util.List;
 public class Main {
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static List<Bot> bots = new ArrayList<>();
+    
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
@@ -27,8 +30,17 @@ public class Main {
             Arrays.stream(files).forEach(botFile -> bots.add(new ReaderMK(botFile).build()));
         }
         
+        bots.forEach(Bot::start);
+        LoggerMK.info("Bots started successfully.");
         // TODO: Add the server logic to connect with the Controller.
 
-        System.out.println("Server started successfully.");
+        new ConsoleThread().start();
+        LoggerMK.info("Server started successfully.");
+    }
+    
+    public static void stop() {
+        ConsoleThread.stopConsole();
+        bots.forEach(Bot::stop);
+        LoggerMK.info("Server stopped correctly.");
     }
 }
