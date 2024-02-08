@@ -1,6 +1,6 @@
 package dev.tonimatas.discordmk.api;
 
-import dev.tonimatas.discordmk.api.values.ValueMK;
+import dev.tonimatas.discordmk.api.values.types.ValueMK;
 
 public class BasicValue implements ValueMK {
     protected Object value;
