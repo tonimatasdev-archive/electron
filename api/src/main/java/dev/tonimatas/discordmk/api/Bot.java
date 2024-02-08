@@ -31,4 +31,8 @@ public class Bot {
     public String getName() {
         return name;
     }
+
+    public JDA getBot() {
+        return jda;
+    }
 }
