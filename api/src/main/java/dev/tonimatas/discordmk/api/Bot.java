@@ -3,8 +3,12 @@ package dev.tonimatas.discordmk.api;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // TODO: Add 1000 lines
 public class Bot {
+    protected Map<String, Object> values = new HashMap<>();
     protected String token;
     protected String name;
     protected JDA jda;
@@ -34,5 +38,15 @@ public class Bot {
 
     public JDA getBot() {
         return jda;
+    }
+    
+    public Object getValue(int index, String id) throws Exception {
+        Object object = this.values.get(index + "-id");
+        
+        if (object != null) {
+            return object;
+        } else {
+            throw new RuntimeException("Error on getValue of index " + index + " on the function " + id);
+        }
     }
 }
