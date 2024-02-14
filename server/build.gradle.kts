@@ -8,6 +8,7 @@ val jdaVersion: String by extra
 dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("net.dv8tion:JDA:$jdaVersion")
+    implementation(project(":common"))
     implementation(project(":api"))
 }
 
