@@ -3,9 +3,8 @@ plugins {
     application
 }
 
-val jdaVersion: String by extra
-
 dependencies {
+    implementation(project(":common"))
 }
 
 application {

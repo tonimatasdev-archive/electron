@@ -3,10 +3,9 @@ plugins {
 }
 
 val projectVersion: String by extra
+val jdaVersion: String by extra
 
 base.archivesName.set("DiscordMK")
-
-subprojects {}
 
 allprojects {
     apply(plugin = "java")
@@ -26,4 +25,13 @@ allprojects {
     }
 
     java.withSourcesJar()
+}
+
+
+subprojects {
+    if (project.name == "controller") return@subprojects
+    
+    dependencies {
+        implementation("net.dv8tion:JDA:$jdaVersion")
+    }
 }
