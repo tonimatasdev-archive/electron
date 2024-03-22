@@ -37,19 +37,32 @@ public class Main {
         
         bots.forEach(Bot::start);
         LoggerMK.info("Bots started successfully.");
-        // TODO: Add the server logic to connect with the Controller.
 
         initConsoleThread();
         
-        try {
-            // TODO: Possibility to change host and port
-            socket = new Socket("localhost", 2555);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         LoggerMK.info("Server started successfully.");
 
+        // TODO: Possibility to change host and port
+        String host = "localhost";
+        int port = 2555;
+        
+        while (!stopped && socket == null) {
+            try {
+                socket = new Socket(host, port);
+            } catch (IOException e) {
+                LoggerMK.error("Error on connect to the server " + host + ":" + port + ". Next try in 30 seconds.");
+            }
+
+            try {
+                //noinspection BusyWait
+                Thread.sleep(30 * 1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        
+        LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
+        
         initReceiveThread();
     }
     
