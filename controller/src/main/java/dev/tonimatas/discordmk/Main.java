@@ -1,15 +1,21 @@
 package dev.tonimatas.discordmk;
 
-import dev.tonimatas.discordmk.console.CommandsMKImpl;
-import dev.tonimatas.discordmk.console.ConsoleThread;
+import dev.tonimatas.discordmk.console.CommandsMK;
 import dev.tonimatas.discordmk.console.LoggerMK;
-import dev.tonimatas.discordmk.network.NetworkUtils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class Main {
+    public static ServerSocket serverSocket;
+    public static List<Socket> clients = new ArrayList<>();
+    public static boolean stopped = false;
+    
     public static void main(String[] args) {
         // TODO: Properties
         Properties properties = new Properties();
@@ -18,30 +24,57 @@ public class Main {
         
         // TODO: Connected server list
 
-        String port = properties.getProperty("port");
+        String port = "2555"; // properties.getProperty("port");
         
         try {
-            NetworkUtils.serverSocket = new ServerSocket(Integer.parseInt(port));
+            serverSocket = new ServerSocket(Integer.parseInt(port));
         } catch (IOException e) {
             LoggerMK.error("Error on create the server socket.");
         }
         
-        if (NetworkUtils.serverSocket == null) stop();
-        NetworkUtils.initServer(NetworkUtils.serverSocket);
+        if (serverSocket == null) stop();
+        initServer(serverSocket);
         LoggerMK.info("Server uses port: " + port);
         
-        Common.consoleThread = new ConsoleThread(new CommandsMKImpl());
-        Common.consoleThread.start();
+        initConsoleThread();
         
         LoggerMK.info("Controller started successfully.");
     }
 
+    public static void initConsoleThread() {
+        new Thread(() -> {
+            while (!stopped) {
+                Scanner scanner = new Scanner(System.in);
+                String command = scanner.nextLine();
+                CommandsMK.runCommand(command);
+            }
+        }).start();
+    }
+
+    public static void initServer(ServerSocket serverSocket) {
+        new Thread("serverSocket") {
+            @Override
+            public void run() {
+                while (!stopped) {
+                    try {
+                        Socket socket = serverSocket.accept();
+
+                        clients.add(socket);
+
+                        LoggerMK.info("Server connected. IP: " + socket.getInetAddress());
+                    } catch (IOException e) {
+                        LoggerMK.error("Error on connect with a socket.");
+                    }
+                }
+            }
+        }.start();
+    }
+
     public static void stop() {
-        Common.stopped = true;
-        Common.consoleThread.stopConsole();
+        stopped = true;
         
         try {
-            NetworkUtils.serverSocket.close();
+            serverSocket.close();
         } catch (IOException e) {
             LoggerMK.error("Error on close the server socket.");
         }
