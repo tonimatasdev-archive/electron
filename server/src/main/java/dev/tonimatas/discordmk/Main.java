@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import dev.tonimatas.discordmk.api.Bot;
 import dev.tonimatas.discordmk.console.CommandsMK;
 import dev.tonimatas.discordmk.console.LoggerMK;
-import dev.tonimatas.discordmk.network.Messages;
 import dev.tonimatas.discordmk.reader.ReaderMK;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -79,7 +79,12 @@ public class Main {
     public static void initReceiveThread() {
         new Thread(() -> {
             while (!stopped) {
-                CommandsMK.runCommand(Messages.receive(socket));
+                try {
+                    DataInputStream in = new DataInputStream(socket.getInputStream());
+                    CommandsMK.runCommand(in.readUTF());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }).start();
     }

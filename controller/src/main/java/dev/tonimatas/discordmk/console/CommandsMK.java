@@ -1,7 +1,7 @@
 package dev.tonimatas.discordmk.console;
 
 import dev.tonimatas.discordmk.Main;
-import dev.tonimatas.discordmk.network.Messages;
+import dev.tonimatas.discordmk.util.Network;
 
 import java.net.Socket;
 
@@ -20,7 +20,7 @@ public class CommandsMK {
     
     private static void handleTest() {
         for (Socket socket : Main.sockets) {
-            Messages.send(socket, "Hello");
+            Network.send(socket, "Hello");
         }
     }
 }
