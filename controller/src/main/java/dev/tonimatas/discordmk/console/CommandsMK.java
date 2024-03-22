@@ -19,7 +19,7 @@ public class CommandsMK {
     }
     
     private static void handleTest() {
-        for (Socket socket : Main.clients) {
+        for (Socket socket : Main.sockets) {
             Messages.send(socket, "Hello");
         }
     }

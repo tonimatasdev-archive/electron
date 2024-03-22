@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class Main {
     public static ServerSocket serverSocket;
-    public static List<Socket> clients = new ArrayList<>();
+    public static List<Socket> sockets = new ArrayList<>();
     public static boolean stopped = false;
     
     public static void main(String[] args) {
@@ -33,7 +33,8 @@ public class Main {
         }
         
         if (serverSocket == null) stop();
-        initServer(serverSocket);
+        initAcceptThread();
+        initCheckThread();
         LoggerMK.info("Server uses port: " + port);
         
         initConsoleThread();
@@ -50,24 +51,33 @@ public class Main {
             }
         }).start();
     }
+    
+    public static void initCheckThread() {
+        new Thread(() -> {
+            sockets.removeIf(Socket::isClosed);
+            
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
 
-    public static void initServer(ServerSocket serverSocket) {
-        new Thread("serverSocket") {
-            @Override
-            public void run() {
-                while (!stopped) {
-                    try {
-                        Socket socket = serverSocket.accept();
+    public static void initAcceptThread() {
+        new Thread(() -> {
+            while (!stopped) {
+                try {
+                    Socket socket = serverSocket.accept();
 
-                        clients.add(socket);
+                    sockets.add(socket);
 
-                        LoggerMK.info("Server connected. IP: " + socket.getInetAddress());
-                    } catch (IOException e) {
-                        LoggerMK.error("Error on connect with a socket.");
-                    }
+                    LoggerMK.info("Server connected. IP: " + socket.getInetAddress());
+                } catch (IOException e) {
+                    LoggerMK.error("Error on connect with a socket.");
                 }
             }
-        }.start();
+        }).start();
     }
 
     public static void stop() {
