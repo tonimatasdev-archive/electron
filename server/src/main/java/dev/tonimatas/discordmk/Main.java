@@ -3,18 +3,16 @@ package dev.tonimatas.discordmk;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.tonimatas.discordmk.api.Bot;
-import dev.tonimatas.discordmk.console.CommandsMK;
 import dev.tonimatas.discordmk.console.LoggerMK;
 import dev.tonimatas.discordmk.reader.ReaderMK;
+import dev.tonimatas.discordmk.threads.ThreadsMK;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -38,14 +36,22 @@ public class Main {
         bots.forEach(Bot::start);
         LoggerMK.info("Bots started successfully.");
 
-        initConsoleThread();
+        ThreadsMK.initConsoleThread();
         
         LoggerMK.info("Server started successfully.");
 
         // TODO: Possibility to change host and port
         String host = "localhost";
         int port = 2555;
+
+        initConnection(host, port);
         
+        LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
+        
+        ThreadsMK.initReceiveThread();
+    }
+    
+    public static void initConnection(String host, int port) {
         while (!stopped && socket == null) {
             try {
                 socket = new Socket(host, port);
@@ -60,33 +66,6 @@ public class Main {
                 throw new RuntimeException(e);
             }
         }
-        
-        LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
-        
-        initReceiveThread();
-    }
-    
-    public static void initConsoleThread() {
-        new Thread(() -> {
-            while (!stopped) {
-                Scanner scanner = new Scanner(System.in);
-                String command = scanner.nextLine();
-                CommandsMK.runCommand(command);
-            }
-        }).start();
-    }
-    
-    public static void initReceiveThread() {
-        new Thread(() -> {
-            while (!stopped) {
-                try {
-                    DataInputStream in = new DataInputStream(socket.getInputStream());
-                    CommandsMK.runCommand(in.readUTF());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
     }
     
     public static void stop() {

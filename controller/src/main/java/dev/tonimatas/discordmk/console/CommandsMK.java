@@ -1,7 +1,7 @@
 package dev.tonimatas.discordmk.console;
 
 import dev.tonimatas.discordmk.Main;
-import dev.tonimatas.discordmk.util.Network;
+import dev.tonimatas.discordmk.utils.NetworkMK;
 
 import java.net.Socket;
 
@@ -10,6 +10,8 @@ public class CommandsMK {
         switch (command) {
             case "stop" -> handleStop();
             case "test" -> handleTest();
+            case "send" -> handleSend();
+            // TODO: Server list command
             default -> LoggerMK.error("Command \"" + command + "\" not found.");
         }
     }
@@ -20,7 +22,11 @@ public class CommandsMK {
     
     private static void handleTest() {
         for (Socket socket : Main.sockets) {
-            Network.send(socket, "Hello");
+            NetworkMK.send(socket, "Hello");
         }
+    }
+    
+    private static void handleSend() {
+        
     }
 }
