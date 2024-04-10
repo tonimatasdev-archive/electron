@@ -1,6 +1,6 @@
 package dev.tonimatas.discordmk.threads;
 
-import dev.tonimatas.discordmk.Main;
+import dev.tonimatas.discordmk.ControllerMK;
 import dev.tonimatas.discordmk.console.CommandsMK;
 import dev.tonimatas.discordmk.console.LoggerMK;
 import dev.tonimatas.discordmk.console.TasksMK;
@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class ThreadsMK {
     public static void initConsoleThread() {
         new Thread(() -> {
-            while (!Main.stopped) {
+            while (!ControllerMK.stopped) {
                 Scanner scanner = new Scanner(System.in);
                 String command = scanner.nextLine();
                 CommandsMK.runCommand(command);
@@ -23,7 +23,7 @@ public class ThreadsMK {
 
     public static void initCheckThread() {
         new Thread(() -> {
-            Main.sockets.removeIf(Socket::isClosed);
+            ControllerMK.sockets.removeIf(Socket::isClosed);
 
             try {
                 Thread.sleep(250);
@@ -35,11 +35,11 @@ public class ThreadsMK {
 
     public static void initAcceptThread() {
         new Thread(() -> {
-            while (!Main.stopped) {
+            while (!ControllerMK.stopped) {
                 try {
-                    Socket socket = Main.serverSocket.accept();
+                    Socket socket = ControllerMK.serverSocket.accept();
                     initReceiveThread(socket);
-                    Main.sockets.add(socket);
+                    ControllerMK.sockets.add(socket);
 
                     LoggerMK.info("Server connected. IP: " + socket.getInetAddress());
                 } catch (IOException e) {
@@ -51,7 +51,7 @@ public class ThreadsMK {
 
     public static void initReceiveThread(Socket socket) {
         new Thread(() -> {
-            while (!Main.stopped) {
+            while (!ControllerMK.stopped) {
                 try {
                     DataInputStream in = new DataInputStream(socket.getInputStream());
                     TasksMK.runTask(in.readUTF());

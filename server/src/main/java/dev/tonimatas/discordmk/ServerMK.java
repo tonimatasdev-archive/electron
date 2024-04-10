@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Main {
+public class ServerMK {
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static List<Bot> bots = new ArrayList<>();
     public static Socket socket;

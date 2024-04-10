@@ -1,6 +1,6 @@
 package dev.tonimatas.discordmk.console;
 
-import dev.tonimatas.discordmk.Main;
+import dev.tonimatas.discordmk.ServerMK;
 import dev.tonimatas.discordmk.utils.NetworkMK;
 
 public class TasksMK {
@@ -16,6 +16,6 @@ public class TasksMK {
     private static void handleExample(String args) {
         LoggerMK.info("Test received from " + args);
         LoggerMK.info("Sending test to " + args);
-        NetworkMK.send(Main.socket, "test:" + Main.socket.getInetAddress());
+        NetworkMK.send(ServerMK.socket, "test:" + ServerMK.socket.getInetAddress());
     }
 }

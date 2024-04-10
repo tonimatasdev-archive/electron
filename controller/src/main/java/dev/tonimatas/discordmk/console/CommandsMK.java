@@ -1,6 +1,6 @@
 package dev.tonimatas.discordmk.console;
 
-import dev.tonimatas.discordmk.Main;
+import dev.tonimatas.discordmk.ControllerMK;
 import dev.tonimatas.discordmk.utils.NetworkMK;
 
 import java.net.Socket;
@@ -17,12 +17,12 @@ public class CommandsMK {
     }
     
     private static void handleStop() {
-        Main.stop();
+        ControllerMK.stop();
     }
     
     private static void handleTest() {
-        for (Socket socket : Main.sockets) {
-            NetworkMK.send(socket, "test:" + Main.serverSocket.getInetAddress());
+        for (Socket socket : ControllerMK.sockets) {
+            NetworkMK.send(socket, "test:" + ControllerMK.serverSocket.getInetAddress());
         }
     }
     
