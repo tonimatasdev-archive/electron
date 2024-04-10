@@ -1,6 +1,7 @@
 package dev.tonimatas.discordmk.console;
 
 import dev.tonimatas.discordmk.Main;
+import dev.tonimatas.discordmk.utils.NetworkMK;
 
 public class CommandsMK {
     public static void runCommand(String command) {
@@ -16,6 +17,6 @@ public class CommandsMK {
     }
     
     private static void handleSend() {
-        
+        NetworkMK.send(Main.socket, "Hello from server");
     }
 }
