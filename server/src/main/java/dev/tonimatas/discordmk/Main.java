@@ -57,13 +57,12 @@ public class Main {
                 socket = new Socket(host, port);
             } catch (IOException e) {
                 LoggerMK.error("Error on connect to the server " + host + ":" + port + ". Next try in 30 seconds.");
-            }
-
-            try {
-                //noinspection BusyWait
-                Thread.sleep(30 * 1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(30 * 1000);
+                } catch (InterruptedException exception) {
+                    throw new RuntimeException(exception);
+                }
             }
         }
     }
