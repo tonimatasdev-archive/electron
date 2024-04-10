@@ -44,28 +44,10 @@ public class Main {
         String host = "localhost";
         int port = 2555;
 
-        initConnection(host, port);
-        
-        LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
-        
-        ThreadsMK.initReceiveThread();
+        ThreadsMK.initCheckConnection(host, port);
     }
     
-    public static void initConnection(String host, int port) {
-        while (!stopped && socket == null) {
-            try {
-                socket = new Socket(host, port);
-            } catch (IOException e) {
-                LoggerMK.error("Error on connect to the server " + host + ":" + port + ". Next try in 30 seconds.");
-                try {
-                    //noinspection BusyWait
-                    Thread.sleep(30 * 1000);
-                } catch (InterruptedException exception) {
-                    throw new RuntimeException(exception);
-                }
-            }
-        }
-    }
+    
     
     public static void stop() {
         stopped = true;
