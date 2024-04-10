@@ -2,11 +2,10 @@ package dev.tonimatas.discordmk.threads;
 
 import dev.tonimatas.discordmk.Main;
 import dev.tonimatas.discordmk.console.CommandsMK;
-import dev.tonimatas.discordmk.console.LoggerMK;
+import dev.tonimatas.discordmk.console.TasksMK;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class ThreadsMK {
@@ -25,7 +24,7 @@ public class ThreadsMK {
             while (!Main.stopped) {
                 try {
                     DataInputStream in = new DataInputStream(Main.socket.getInputStream());
-                    CommandsMK.runCommand(in.readUTF());
+                    TasksMK.runTask(in.readUTF());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
