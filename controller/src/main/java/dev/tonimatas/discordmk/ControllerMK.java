@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class Main {
+public class ControllerMK {
     public static ServerSocket serverSocket;
     public static List<Socket> sockets = new ArrayList<>();
     public static boolean stopped = false;
