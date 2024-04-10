@@ -1,4 +1,4 @@
-package dev.tonimatas.discordmk.util;
+package dev.tonimatas.discordmk.utils;
 
 import dev.tonimatas.discordmk.console.LoggerMK;
 
@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Network {
+public class NetworkMK {
     public static boolean send(Socket socket, String message) {
         if (socket.isClosed()) {
             LoggerMK.error("The server " + socket.getInetAddress() + " is closed.");
