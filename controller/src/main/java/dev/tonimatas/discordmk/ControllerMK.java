@@ -29,7 +29,6 @@ public class ControllerMK {
         }
         
         ThreadsMK.initAcceptThread();
-        ThreadsMK.initCheckThread();
         LoggerMK.info("Server uses port: " + port);
         
         ThreadsMK.initConsoleThread();
