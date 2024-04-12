@@ -5,7 +5,7 @@ import dev.tonimatas.discordmk.utils.NetworkMK;
 
 public class TasksMK {
     public static void runTask(String task) {
-        String[] splitTask = task.split(":", 1);
+        String[] splitTask = task.split(":");
         
         switch (splitTask[0]) {
             case "test" -> handleExample(splitTask[1]);
@@ -16,6 +16,6 @@ public class TasksMK {
     private static void handleExample(String args) {
         LoggerMK.info("Test received from " + args);
         LoggerMK.info("Sending test to " + args);
-        NetworkMK.send(ServerMK.socket, "test:" + ServerMK.socket.getInetAddress());
+        NetworkMK.send(ServerMK.socket, "test:" + ServerMK.socket.getInetAddress().getHostAddress());
     }
 }
