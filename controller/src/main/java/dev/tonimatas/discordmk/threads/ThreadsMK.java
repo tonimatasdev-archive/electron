@@ -23,7 +23,10 @@ public class ThreadsMK {
 
     public static void initCheckThread() {
         new Thread(() -> {
-            ControllerMK.sockets.removeIf(Socket::isClosed);
+            ControllerMK.sockets.removeIf(socket -> {
+                LoggerMK.info("Server disconnected. IP: " + socket.getInetAddress().getHostAddress());
+                return !socket.isClosed();
+            });
 
             try {
                 Thread.sleep(250);
@@ -41,7 +44,7 @@ public class ThreadsMK {
                     initReceiveThread(socket);
                     ControllerMK.sockets.add(socket);
 
-                    LoggerMK.info("Server connected. IP: " + socket.getInetAddress());
+                    LoggerMK.info("Server connected. IP: " + socket.getInetAddress().getHostAddress());
                 } catch (IOException e) {
                     LoggerMK.error("Error on connect with a socket.");
                 }
@@ -51,12 +54,13 @@ public class ThreadsMK {
 
     public static void initReceiveThread(Socket socket) {
         new Thread(() -> {
-            while (!ControllerMK.stopped) {
+            while (!ControllerMK.stopped && ControllerMK.sockets.contains(socket)) {
                 try {
                     DataInputStream in = new DataInputStream(socket.getInputStream());
                     TasksMK.runTask(in.readUTF());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    LoggerMK.info("Server disconnected. IP: " + socket.getInetAddress().getHostAddress());
+                    ControllerMK.sockets.remove(socket);
                 }
             }
         }).start();

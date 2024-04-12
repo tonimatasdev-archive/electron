@@ -22,7 +22,7 @@ public class CommandsMK {
     
     private static void handleTest() {
         for (Socket socket : ControllerMK.sockets) {
-            NetworkMK.send(socket, "test:" + ControllerMK.serverSocket.getInetAddress());
+            NetworkMK.send(socket, "test:" + ControllerMK.serverSocket.getInetAddress().getHostAddress());
         }
     }
     
