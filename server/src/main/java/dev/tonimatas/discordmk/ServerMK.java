@@ -44,7 +44,7 @@ public class ServerMK {
         String host = "localhost";
         int port = 2555;
 
-        ThreadsMK.initCheckConnection(host, port);
+        ThreadsMK.initConnectionThread(host, port);
     }
     
     

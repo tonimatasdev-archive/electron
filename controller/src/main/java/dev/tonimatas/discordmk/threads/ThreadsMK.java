@@ -21,21 +21,6 @@ public class ThreadsMK {
         }).start();
     }
 
-    public static void initCheckThread() {
-        new Thread(() -> {
-            ControllerMK.sockets.removeIf(socket -> {
-                LoggerMK.info("Server disconnected. IP: " + socket.getInetAddress().getHostAddress());
-                return !socket.isClosed();
-            });
-
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-    }
-
     public static void initAcceptThread() {
         new Thread(() -> {
             while (!ControllerMK.stopped) {

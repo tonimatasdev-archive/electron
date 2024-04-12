@@ -21,7 +21,7 @@ public class ThreadsMK {
         }).start();
     }
 
-    public static void initReceiveThread() {
+    public static void initReceiveThread(String host, int port) {
         new Thread(() -> {
             while (!ServerMK.stopped && ServerMK.socket != null) {
                 try {
@@ -29,23 +29,7 @@ public class ThreadsMK {
                     TasksMK.runTask(in.readUTF());
                 } catch (IOException ignored) {
                     ServerMK.socket = null;
-                }
-            }
-        }).start();
-    }
-    
-    public static void initCheckConnection(String host, int port) {
-        new Thread(() -> {
-            while (!ServerMK.stopped) {
-                if (ServerMK.socket == null) {
                     initConnectionThread(host, port);
-                }
-                
-                try {
-                    //noinspection BusyWait
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -56,7 +40,7 @@ public class ThreadsMK {
             try {
                 ServerMK.socket = new Socket(host, port);
             } catch (IOException e) {
-                LoggerMK.error("Error on connect to the server " + host + ":" + port + ". Next try in 30 seconds.");
+                LoggerMK.error("Error on connect to the controller " + host + ":" + port + ". Next try in 30 seconds.");
                 
                 try {
                     //noinspection BusyWait
@@ -68,6 +52,6 @@ public class ThreadsMK {
         }
         
         LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
-        ThreadsMK.initReceiveThread();
+        ThreadsMK.initReceiveThread(host, port);
     }
 }
