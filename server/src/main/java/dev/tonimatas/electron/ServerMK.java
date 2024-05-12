@@ -6,6 +6,7 @@ import dev.tonimatas.electron.api.Bot;
 import dev.tonimatas.electron.console.LoggerMK;
 import dev.tonimatas.electron.reader.ReaderMK;
 import dev.tonimatas.electron.threads.ThreadsMK;
+import dev.tonimatas.electron.util.PropertiesMK;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,13 +23,21 @@ public class ServerMK {
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
+
+        try {
+            PropertiesMK.load();
+        } catch (IOException e) {
+            LoggerMK.error("Error on load the server properties.");
+            throw new RuntimeException(e);
+        }
+
         File file = new File("bots");
         
         if (!file.exists()) file.mkdir();
         
         File[] files = file.listFiles();
         if (files == null) {
-            System.out.println("No bot to load.");
+            LoggerMK.info("No bots to load");
         } else {
             Arrays.stream(files).forEach(botFile -> bots.add(new ReaderMK(botFile).build()));
         }
@@ -40,11 +49,7 @@ public class ServerMK {
         
         LoggerMK.info("Server started successfully.");
 
-        // TODO: Possibility to change host and port
-        String host = "localhost";
-        int port = 2555;
-
-        ThreadsMK.initConnectionThread(host, port);
+        ThreadsMK.initConnectionThread(PropertiesMK.controllerIp, PropertiesMK.port);
     }
     
     

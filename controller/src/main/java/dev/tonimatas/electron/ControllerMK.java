@@ -2,6 +2,7 @@ package dev.tonimatas.electron;
 
 import dev.tonimatas.electron.console.LoggerMK;
 import dev.tonimatas.electron.threads.ThreadsMK;
+import dev.tonimatas.electron.util.PropertiesMK;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,7 +11,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 @SpringBootApplication
 public class ControllerMK {
@@ -19,20 +19,22 @@ public class ControllerMK {
     public static boolean stopped = false;
     
     public static void main(String[] args) {
-        // TODO: Properties
-        Properties properties = new Properties();
-        
-        int port = 2555; // properties.getProperty("port");
+        try {
+            PropertiesMK.load();
+        } catch (IOException e) {
+            LoggerMK.error("Error on load the controller properties.");
+            throw new RuntimeException(e);
+        }
         
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(PropertiesMK.port);
         } catch (IOException e) {
-            LoggerMK.error("Error on create the server socket.");
+            LoggerMK.error("Error on create the controller socket.");
             throw new RuntimeException(e);
         }
         
         ThreadsMK.initAcceptThread();
-        LoggerMK.info("Server uses port: " + port);
+        LoggerMK.info("Server uses port: " + PropertiesMK.port);
         
         ThreadsMK.initConsoleThread();
 
@@ -46,7 +48,7 @@ public class ControllerMK {
         try {
             serverSocket.close();
         } catch (IOException e) {
-            LoggerMK.error("Error on close the server socket.");
+            LoggerMK.error("Error on close the controller socket.");
         }
         
         LoggerMK.info("Controller stopped correctly.");
