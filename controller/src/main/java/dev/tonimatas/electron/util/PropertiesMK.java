@@ -13,7 +13,7 @@ public class PropertiesMK {
     public static String token; // TODO
     public static String databaseUser; // TODO
     public static String databasePassword; // TODO
-    public static List<String> allowedIps; // TODO
+    public static List<String> allowedIps;
     
     public static void load() throws IOException {
         File propertiesFile = new File("config.properties");

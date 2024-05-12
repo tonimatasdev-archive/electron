@@ -4,6 +4,7 @@ import dev.tonimatas.electron.ControllerMK;
 import dev.tonimatas.electron.console.CommandsMK;
 import dev.tonimatas.electron.console.LoggerMK;
 import dev.tonimatas.electron.console.TasksMK;
+import dev.tonimatas.electron.util.PropertiesMK;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -26,10 +27,17 @@ public class ThreadsMK {
             while (!ControllerMK.stopped) {
                 try {
                     Socket socket = ControllerMK.serverSocket.accept();
-                    initReceiveThread(socket);
-                    ControllerMK.sockets.add(socket);
+                    
+                    if (PropertiesMK.allowedIps.contains(socket.getInetAddress().getHostAddress())) {
+                        // TODO: Now check the server token
+                        initReceiveThread(socket);
+                        ControllerMK.sockets.add(socket);
 
-                    LoggerMK.info("Server connected. IP: " + socket.getInetAddress().getHostAddress());
+                        LoggerMK.info("Server connected. IP: " + socket.getInetAddress().getHostAddress());
+                    } else {
+                        socket.close();
+                        LoggerMK.info("A server (IP: " + socket.getInetAddress().getHostAddress() + ") tried to connect, but is not allowed in the config.");
+                    }
                 } catch (IOException e) {
                     LoggerMK.error("Error on connect with a socket.");
                 }
