@@ -2,6 +2,8 @@ package dev.tonimatas.electron;
 
 import dev.tonimatas.electron.console.LoggerMK;
 import dev.tonimatas.electron.threads.ThreadsMK;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+@SpringBootApplication
 public class ControllerMK {
     public static ServerSocket serverSocket;
     public static List<Socket> sockets = new ArrayList<>();
@@ -32,7 +35,8 @@ public class ControllerMK {
         LoggerMK.info("Server uses port: " + port);
         
         ThreadsMK.initConsoleThread();
-        
+
+        SpringApplication.run(ControllerMK.class, args);
         LoggerMK.info("Controller started successfully.");
     }
 

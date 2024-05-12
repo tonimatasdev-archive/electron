@@ -10,8 +10,10 @@ base.archivesName.set("electron")
 allprojects {
     apply(plugin = "java")
     
-    java.setSourceCompatibility(17)
-    java.setTargetCompatibility(17)
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
     
     version = projectVersion
     group = "dev.tonimatas"
