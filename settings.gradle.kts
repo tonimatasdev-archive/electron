@@ -6,4 +6,4 @@ pluginManagement {
 
 include("api", "common", "server", "controller")
 
-rootProject.name = "DiscordMK"
+rootProject.name = "electron"
