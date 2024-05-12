@@ -1,6 +1,7 @@
 package dev.tonimatas.electron.console;
 
 import dev.tonimatas.electron.ServerMK;
+import dev.tonimatas.electron.util.PropertiesMK;
 import dev.tonimatas.electron.utils.NetworkMK;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class TasksMK {
         switch (splitTask[0]) {
             case "test" -> handleExample(args);
             case "bot" -> handleBot(args);
+            case "not-allowed" -> handleNotAllowed();
             default -> LoggerMK.error("Task \"" + splitTask[0] + "\" not found.");
         }
     }
@@ -43,5 +45,18 @@ public class TasksMK {
         } catch (IOException e) {
             LoggerMK.info("Error on save bot: " + botId);
         }
+    }
+
+    private static void handleNotAllowed() {
+        ServerMK.allowed = false;
+        LoggerMK.error("Not allowed to connect to the controller " + PropertiesMK.controllerIp + ". Add this server ip to the allowed ips in the controller config.");
+        
+        try {
+            ServerMK.socket.close();
+        } catch (IOException e) {
+            LoggerMK.error("Error on close the socket.");
+        }
+        
+        LoggerMK.info("Restart the server for try again.");
     }
 }

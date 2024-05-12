@@ -20,6 +20,7 @@ public class ServerMK {
     public static List<Bot> bots = new ArrayList<>();
     public static Socket socket;
     public static boolean stopped = false;
+    public static boolean allowed = true;
     
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
@@ -57,7 +58,7 @@ public class ServerMK {
     public static void stop() {
         stopped = true;
         bots.forEach(Bot::stop);
-
+        
         try {
             socket.close();
         } catch (IOException e) {
