@@ -9,7 +9,7 @@ import java.util.Properties;
 public class PropertiesMK {
     public static int port;
     public static String token; // TODO
-    public static String controllerIp; // TODO
+    public static String controllerIp;
     
     public static void load() throws IOException {
         File propertiesFile = new File("config.properties");
