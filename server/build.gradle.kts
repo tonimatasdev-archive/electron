@@ -13,5 +13,5 @@ dependencies {
 }
 
 application {
-    mainClass = "dev.tonimatas.discordmk.ServerMK"
+    mainClass = "dev.tonimatas.electron.ServerMK"
 }
