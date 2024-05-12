@@ -23,7 +23,7 @@ public class ThreadsMK {
 
     public static void initReceiveThread(String host, int port) {
         new Thread(() -> {
-            while (!ServerMK.stopped && ServerMK.socket != null) {
+            while (!ServerMK.stopped && ServerMK.socket != null && ServerMK.allowed) {
                 try {
                     DataInputStream in = new DataInputStream(ServerMK.socket.getInputStream());
                     TasksMK.runTask(in.readUTF());
@@ -36,7 +36,7 @@ public class ThreadsMK {
     }
 
     public static void initConnectionThread(String host, int port) {
-        while (!ServerMK.stopped && ServerMK.socket == null) {
+        while (!ServerMK.stopped && ServerMK.socket == null && ServerMK.allowed) {
             try {
                 ServerMK.socket = new Socket(host, port);
             } catch (IOException e) {
