@@ -5,7 +5,7 @@ plugins {
 val projectVersion: String by extra
 val jdaVersion: String by extra
 
-base.archivesName.set("DiscordMK")
+base.archivesName.set("electron")
 
 allprojects {
     apply(plugin = "java")
