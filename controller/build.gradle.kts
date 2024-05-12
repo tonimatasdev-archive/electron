@@ -8,5 +8,5 @@ dependencies {
 }
 
 application {
-    mainClass = "dev.tonimatas.discordmk.ControllerMK"
+    mainClass = "dev.tonimatas.electron.ControllerMK"
 }
