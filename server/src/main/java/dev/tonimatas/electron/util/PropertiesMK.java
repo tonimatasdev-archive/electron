@@ -8,18 +8,18 @@ import java.util.Properties;
 
 public class PropertiesMK {
     public static int port;
-    public static String token; // TODO
+    public static String token;
     public static String controllerIp;
     
     public static void load() throws IOException {
-        File propertiesFile = new File("config.properties");
+        File propertiesFile = new File("server.properties");
 
         Properties properties = new Properties();
         
         if (!propertiesFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
             propertiesFile.createNewFile();
-            properties.setProperty("port", "2555");
+            properties.setProperty("port", "25555");
             properties.setProperty("token", "default");
             properties.setProperty("controller_ip", "0.0.0.0");
             properties.store(new FileOutputStream(propertiesFile), null);

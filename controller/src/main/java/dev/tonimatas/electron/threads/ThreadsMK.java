@@ -10,6 +10,7 @@ import dev.tonimatas.electron.utils.NetworkMK;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.Duration;
 import java.util.Scanner;
 
 public class ThreadsMK {
@@ -29,18 +30,33 @@ public class ThreadsMK {
                 try {
                     Socket socket = ControllerMK.serverSocket.accept();
                     
-                    if (PropertiesMK.allowedIps.contains(socket.getInetAddress().getHostAddress())) {
-                        // TODO: Now check the server token
-                        initReceiveThread(socket);
-                        ControllerMK.sockets.add(socket);
+                    if (PropertiesMK.allowedIps.contains(socket.getInetAddress().getHostAddress()) || !PropertiesMK.checkAllowedIps) {
+                        NetworkMK.send(socket, "true");
 
-                        LoggerMK.info("Server connected. IP: " + socket.getInetAddress().getHostAddress());
+                        DataInputStream in = new DataInputStream(socket.getInputStream());
+                        String token = in.readUTF();
+
+                        long time = System.nanoTime();
+                        if (PropertiesMK.token.equals(token)) {
+                            long waitTime = 5000000000L - (System.nanoTime() - time);
+                            Thread.sleep(Duration.ofNanos(waitTime));
+
+                            NetworkMK.send(socket, "true");
+                            initReceiveThread(socket);
+                            ControllerMK.sockets.add(socket);
+
+                            LoggerMK.info("Server connected. IP: " + socket.getInetAddress().getHostAddress());
+                        } else {
+                            NetworkMK.send(socket, "false");
+                            LoggerMK.warn("Server tried to connect with incorrect token. IP: " + socket.getInetAddress().getHostAddress());
+                            socket.close();
+                        }
                     } else {
-                        NetworkMK.send(socket, "not-allowed");
+                        NetworkMK.send(socket, "false");
                         LoggerMK.warn("A server (IP: " + socket.getInetAddress().getHostAddress() + ") tried to connect, but is not allowed in the config.");
                         socket.close();
                     }
-                } catch (IOException e) {
+                } catch (InterruptedException | IOException e) {
                     if (ControllerMK.stopped) return;
                     LoggerMK.error("Error on connect with a socket.");
                 }
