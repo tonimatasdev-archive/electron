@@ -15,12 +15,12 @@ public class PropertiesMK {
     public static String databasePassword; // TODO
     public static List<String> allowedIps;
     public static boolean checkAllowedIps;
-    
+
     public static void load() throws IOException {
         File propertiesFile = new File("controller.properties");
 
         Properties properties = new Properties();
-        
+
         if (!propertiesFile.exists()) {
             //noinspection ResultOfMethodCallIgnored
             propertiesFile.createNewFile();
@@ -32,7 +32,7 @@ public class PropertiesMK {
             properties.setProperty("allowed_ips", "0.0.0.0,127.0.0.1,127.0.0.2");
             properties.store(new FileOutputStream(propertiesFile), null);
         }
-        
+
         properties.load(new FileInputStream(propertiesFile));
         port = Integer.parseInt(properties.getProperty("port"));
         token = properties.getProperty("token");

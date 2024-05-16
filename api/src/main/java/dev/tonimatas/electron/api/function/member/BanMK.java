@@ -16,12 +16,12 @@ public class BanMK extends FunctionMK {
         Member member = (Member) bot.getValue(1, this.id);
         int deletionTimeframe = (int) bot.getValue(3, this.id);
         String timeUnit = (String) bot.getValue(3, this.id);
-        
+
         if (member != null) {
             member.ban(deletionTimeframe, TimeUnit.valueOf(timeUnit)).queue();
             return true;
         }
-        
+
         return false;
     }
 }

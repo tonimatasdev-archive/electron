@@ -11,9 +11,9 @@ public class TasksMK {
     public static void runTask(String task) {
         String[] splitTask = task.split(":");
         String[] args = new String[splitTask.length - 1];
-        
+
         System.arraycopy(splitTask, 1, args, 0, args.length);
-        
+
         switch (splitTask[0]) {
             case "test" -> handleExample(args);
             case "bot" -> handleBot(args);
@@ -26,14 +26,14 @@ public class TasksMK {
         LoggerMK.info("Sending test to " + args[0]);
         NetworkMK.send(ServerMK.socket, "test:" + ServerMK.socket.getInetAddress().getHostAddress());
     }
-    
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private static void handleBot(String[] args) {
         String botId = args[0];
         String botJson = args[1];
 
         File file = new File("bots/" + botId + ".json");
-        
+
         try {
             if (file.exists()) file.delete();
             file.createNewFile();
@@ -44,18 +44,18 @@ public class TasksMK {
             LoggerMK.info("Error on save bot: " + botId);
         }
     }
-    
+
     public static void handleSocketClose(String message) {
         ServerMK.closed = false;
 
         LoggerMK.error(message);
-        
+
         try {
             ServerMK.socket.close();
         } catch (IOException e) {
             LoggerMK.error("Error on close the socket.");
         }
-        
+
         LoggerMK.info("Restart the server for try again.");
     }
 }

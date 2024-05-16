@@ -13,7 +13,7 @@ public class Bot {
     protected String name;
     protected JDA jda;
     protected Thread thread;
-    
+
     public Bot(String token, String name) {
         this.token = token;
         this.name = name;
@@ -22,11 +22,11 @@ public class Bot {
             Bot.this.jda = jdaBuilder.build();
         });
     }
-    
+
     public void start() {
         this.thread.start();
     }
-    
+
     public void stop() {
         this.jda.shutdown();
         this.thread.interrupt();
@@ -39,10 +39,10 @@ public class Bot {
     public JDA getBot() {
         return jda;
     }
-    
+
     public Object getValue(int index, String id) throws Exception {
         Object object = this.values.get(index + "-id");
-        
+
         if (object != null) {
             return object;
         } else {
