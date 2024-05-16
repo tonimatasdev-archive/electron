@@ -1,0 +1,43 @@
+{
+  "name": "Example",
+  "token": "example",
+  
+  "workspaces": [
+    {
+      "idExample1": "workspaceId1",
+      
+      "primaryBlock": {
+        "actionTo": [
+          "blockId2"
+        ],
+        "outputVariables": [
+          "0-blockId2"
+        ]
+      },
+      
+      "otherBlocks": [
+        {
+          "blockId1": "blockId1",
+          "blockType": "string",
+          "value": "Hello world!",
+          "outputVariables": [
+            "0-blockId2"
+          ]
+        },
+
+        {
+          "blockId2": "blockId2",
+          "blockType": "send_message",
+          "actionOf": [
+            "blockId0"
+          ],
+          "outputVariables": [
+          ],
+          "inputVariables": [
+            "0-blockId1"
+          ]
+        }
+      ]
+    }
+  ]
+}
