@@ -36,6 +36,10 @@ public class Bot {
         return name;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public JDA getBot() {
         return jda;
     }

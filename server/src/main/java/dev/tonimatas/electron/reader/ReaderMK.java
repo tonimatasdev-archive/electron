@@ -24,8 +24,8 @@ public class ReaderMK {
             return null;
         }
 
-        String token = jsonObject.get("token").getAsString();
         String name = jsonObject.get("name").getAsString();
+        String token = jsonObject.get("token").getAsString();
 
 
         // Create all read logic

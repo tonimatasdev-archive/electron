@@ -11,13 +11,13 @@ import dev.tonimatas.electron.util.PropertiesMK;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerMK {
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    public static List<Bot> bots = new ArrayList<>();
+    public static Map<String, Bot> bots = new HashMap<>();
     public static Socket socket;
     public static boolean stopped = false;
     public static boolean closed = true;
@@ -40,10 +40,13 @@ public class ServerMK {
         if (files == null) {
             LoggerMK.info("No bots to load");
         } else {
-            Arrays.stream(files).forEach(botFile -> bots.add(new ReaderMK(botFile).build()));
+            Arrays.stream(files).forEach(botFile -> {
+                Bot bot = new ReaderMK(botFile).build();
+                bots.put(bot.getToken(), bot);
+            });
         }
 
-        bots.forEach(Bot::start);
+        bots.values().forEach(Bot::start);
         LoggerMK.info("Bots started successfully.");
 
         ThreadsMK.initConsoleThread();
@@ -56,7 +59,7 @@ public class ServerMK {
 
     public static void stop() {
         stopped = true;
-        bots.forEach(Bot::stop);
+        bots.values().forEach(Bot::stop);
 
         try {
             socket.close();
