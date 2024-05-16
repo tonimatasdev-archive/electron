@@ -25,17 +25,17 @@ public class ControllerMK {
             LoggerMK.error("Error on load the controller properties.");
             throw new RuntimeException(e);
         }
-        
+
         try {
             serverSocket = new ServerSocket(PropertiesMK.port);
         } catch (IOException e) {
             LoggerMK.error("Error on create the controller socket.");
             throw new RuntimeException(e);
         }
-        
+
         ThreadsMK.initAcceptThread();
         LoggerMK.info("Server uses port: " + PropertiesMK.port);
-        
+
         ThreadsMK.initConsoleThread();
 
         SpringApplication.run(ControllerMK.class, args);
@@ -44,13 +44,13 @@ public class ControllerMK {
 
     public static void stop() {
         stopped = true;
-        
+
         try {
             serverSocket.close();
         } catch (IOException e) {
             LoggerMK.error("Error on close the controller socket.");
         }
-        
+
         LoggerMK.info("Controller stopped correctly.");
     }
 }

@@ -21,7 +21,7 @@ public class ServerMK {
     public static Socket socket;
     public static boolean stopped = false;
     public static boolean closed = true;
-    
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
 
@@ -33,38 +33,37 @@ public class ServerMK {
         }
 
         File file = new File("bots");
-        
+
         if (!file.exists()) file.mkdir();
-        
+
         File[] files = file.listFiles();
         if (files == null) {
             LoggerMK.info("No bots to load");
         } else {
             Arrays.stream(files).forEach(botFile -> bots.add(new ReaderMK(botFile).build()));
         }
-        
+
         bots.forEach(Bot::start);
         LoggerMK.info("Bots started successfully.");
 
         ThreadsMK.initConsoleThread();
-        
+
         LoggerMK.info("Server started successfully.");
 
         ThreadsMK.initConnectionThread(PropertiesMK.controllerIp, PropertiesMK.port);
     }
-    
-    
-    
+
+
     public static void stop() {
         stopped = true;
         bots.forEach(Bot::stop);
-        
+
         try {
             socket.close();
         } catch (IOException e) {
             LoggerMK.error("Error on close the socket.");
         }
-        
+
         LoggerMK.info("Server stopped correctly.");
     }
 }

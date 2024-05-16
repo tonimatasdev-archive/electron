@@ -14,7 +14,7 @@ public class CreateChannelMK extends FunctionMK {
         String name = (String) bot.getValue(1, id);
         ChannelType type = (ChannelType) bot.getValue(2, id);
         Guild guild = (Guild) bot.getValue(3, id);
-        
+
         switch (type) {
             case TEXT -> guild.createTextChannel(name).queue();
             case FORUM -> guild.createForumChannel(name).queue();

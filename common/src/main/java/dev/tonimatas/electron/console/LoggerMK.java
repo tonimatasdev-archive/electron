@@ -23,7 +23,7 @@ public class LoggerMK {
             case ERROR -> error(message);
         }
     }
-    
+
     private static void send(String color, Type type, String message) {
         System.out.println(color + "[" + getDate() + "] [" + type.name().toUpperCase() + "]: " + message);
         System.out.print("\u001B[0m");
@@ -32,7 +32,7 @@ public class LoggerMK {
     private static String getDate() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
-    
+
     public enum Type {
         ERROR,
         WARN,

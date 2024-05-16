@@ -11,11 +11,11 @@ public class CommandsMK {
             default -> LoggerMK.error("Command \"" + command + "\" not found.");
         }
     }
-    
+
     private static void handleStop() {
         ServerMK.stop();
     }
-    
+
     private static void handleSend() {
         NetworkMK.send(ServerMK.socket, "Hello from server");
     }

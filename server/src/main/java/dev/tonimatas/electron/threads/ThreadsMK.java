@@ -43,7 +43,7 @@ public class ThreadsMK {
             try {
                 ServerMK.socket = new Socket(host, port);
                 DataInputStream allowed = new DataInputStream(ServerMK.socket.getInputStream());
-                
+
                 if (!Boolean.parseBoolean(allowed.readUTF())) {
                     TasksMK.handleSocketClose("Not allowed to connect to the controller " + PropertiesMK.controllerIp + ". Add this server ip to the allowed ips in the controller config.");
                     return;
@@ -52,14 +52,14 @@ public class ThreadsMK {
                 NetworkMK.send(ServerMK.socket, PropertiesMK.token);
                 LoggerMK.info("Checking token. Wait 5 seconds.");
                 DataInputStream token = new DataInputStream(ServerMK.socket.getInputStream());
-                
+
                 if (!Boolean.parseBoolean(token.readUTF())) {
                     TasksMK.handleSocketClose("Incorrect token to connect to the controller " + PropertiesMK.controllerIp + ".");
                     return;
                 }
             } catch (IOException e) {
                 LoggerMK.error("Error on connect to the controller " + host + ":" + port + ". Next try in 30 seconds.");
-                
+
                 try {
                     //noinspection BusyWait
                     Thread.sleep(30 * 1000);
@@ -68,7 +68,7 @@ public class ThreadsMK {
                 }
             }
         }
-        
+
         LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
         ThreadsMK.initReceiveThread(host, port);
     }

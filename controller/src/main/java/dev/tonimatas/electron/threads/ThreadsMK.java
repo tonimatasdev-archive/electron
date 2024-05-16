@@ -29,7 +29,7 @@ public class ThreadsMK {
             while (!ControllerMK.stopped) {
                 try {
                     Socket socket = ControllerMK.serverSocket.accept();
-                    
+
                     if (PropertiesMK.allowedIps.contains(socket.getInetAddress().getHostAddress()) || !PropertiesMK.checkAllowedIps) {
                         NetworkMK.send(socket, "true");
 
