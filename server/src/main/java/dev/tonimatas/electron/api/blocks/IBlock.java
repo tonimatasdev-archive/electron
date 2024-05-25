@@ -2,6 +2,8 @@ package dev.tonimatas.electron.api.blocks;
 
 import dev.tonimatas.electron.api.Bot;
 
+import java.util.Map;
+
 public interface IBlock {
-    boolean execute(Bot bot);
+    Map<String, Object> execute(Bot bot, Map<String, Object> values);
 }

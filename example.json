@@ -1,40 +1,30 @@
 {
   "name": "Example",
-  "token": "example",
+  "token": "MTEyMjY3NzcwNDMzMjk0MzUzMQ.GLgFu_.4XxbKf7rkaIquL7SxUJ_NXHhQR2AIvnzZOchgQ",
   
   "workspaces": [
     {
-      "idExample1": "workspaceId1",
-      
-      "primaryBlock": {
-        "actionTo": [
-          "blockId2"
-        ],
-        "outputVariables": [
-          "0-blockId2"
-        ]
-      },
-      
-      "otherBlocks": [
+      "type": "message_received",
+      "actionTo": [
+        "blockId2"
+      ],
+
+      "blocks": [
         {
-          "blockId1": "blockId1",
-          "blockType": "string",
-          "value": "Hello world!",
-          "outputVariables": [
-            "0-blockId2"
-          ]
+          "id": "blockId1",
+          "type": "string",
+          "value": "Hello world!"
         },
 
         {
-          "blockId2": "blockId2",
-          "blockType": "send_message",
+          "id": "blockId2",
+          "type": "send_message",
           "actionOf": [
             "blockId0"
           ],
-          "outputVariables": [
-          ],
-          "inputVariables": [
-            "0-blockId1"
+          "variables": [
+            "1-primary_1",
+            "0-blockId1_0"
           ]
         }
       ]
