@@ -4,6 +4,6 @@ pluginManagement {
     }
 }
 
-include("api", "common", "server", "controller")
+include("common", "server", "controller")
 
 rootProject.name = "electron"

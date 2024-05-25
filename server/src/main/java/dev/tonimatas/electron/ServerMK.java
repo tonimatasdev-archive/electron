@@ -24,7 +24,6 @@ public class ServerMK {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
-
         try {
             PropertiesMK.load();
         } catch (IOException e) {
@@ -37,16 +36,20 @@ public class ServerMK {
         if (!file.exists()) file.mkdir();
 
         File[] files = file.listFiles();
-        if (files == null) {
+        if (files == null || files.length == 0) {
             LoggerMK.info("No bots to load");
         } else {
-            Arrays.stream(files).forEach(botFile -> {
-                Bot bot = new ReaderMK(botFile).build();
-                bots.put(bot.getToken(), bot);
-            });
+            Arrays.stream(files).forEach(botFile -> new Thread(() -> {
+                try {
+                    Bot bot = new ReaderMK(botFile).build();
+                    bots.put(bot.getToken(), bot);
+                    LoggerMK.info("Loaded bot: " + botFile.getName());
+                } catch (Exception e) {
+                    LoggerMK.error("Failed to load bot from file: " + botFile.getName());
+                }
+            }).start());
         }
 
-        bots.values().forEach(Bot::start);
         LoggerMK.info("Bots started successfully.");
 
         ThreadsMK.initConsoleThread();
@@ -68,5 +71,6 @@ public class ServerMK {
         }
 
         LoggerMK.info("Server stopped correctly.");
+        Runtime.getRuntime().exit(0);
     }
 }
