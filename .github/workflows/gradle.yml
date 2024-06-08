@@ -7,28 +7,21 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v3.5.2
+      - uses: actions/checkout@v4.1.6
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4.2.1
         with:
           java-version: 21
           distribution: temurin
 
-      
-        
-
       - name: Build with Gradle
         run: chmod +x ./gradlew && ./gradlew exportJar
-          
 
       - name: Upload a the exported jars
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: Controller
-          path: controller/build/libs/**.jar
-
-      - uses: actions/upload-artifact@v3.1.2
-        with:
-          name: Server
-          path: server/build/libs/**.jar
+          path: |
+            controller/build/libs/**.jar
+            server/build/libs/**.jar
