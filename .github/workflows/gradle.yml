@@ -21,7 +21,7 @@ jobs:
       - name: Upload a the exported jars
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: Controller
+          name: ExportedJars
           path: |
             controller/build/libs/**.jar
             server/build/libs/**.jar
