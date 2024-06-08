@@ -15,11 +15,7 @@ tasks.shadowJar {
     archiveClassifier.set("all")
     mergeServiceFiles()
     
-    manifest {
-        attributes(
-            "Main-Class" to "dev.tonimatas.electron.ServerMK",
-        )
-    }
+    manifest.attributes("Main-Class" to "dev.tonimatas.electron.ServerMK")
 }
 
 tasks.build {
