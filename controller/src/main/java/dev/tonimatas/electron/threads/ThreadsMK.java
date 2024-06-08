@@ -27,9 +27,12 @@ public class ThreadsMK {
     public static void initAcceptThread() {
         new Thread(() -> {
             while (!ControllerMK.stopped) {
+                String hostIp = "null";
+                
                 try {
                     Socket socket = ControllerMK.serverSocket.accept();
-
+                    hostIp = socket.getInetAddress().getHostAddress();
+                    
                     if (PropertiesMK.allowedIps.contains(socket.getInetAddress().getHostAddress()) || !PropertiesMK.checkAllowedIps) {
                         NetworkMK.send(socket, "true");
 
@@ -58,7 +61,7 @@ public class ThreadsMK {
                     }
                 } catch (InterruptedException | IOException e) {
                     if (ControllerMK.stopped) return;
-                    LoggerMK.error("Error on connect with a socket.");
+                    LoggerMK.error("Error on connect with a socket. IP: " + hostIp);
                 }
             }
         }).start();
