@@ -20,7 +20,6 @@ public class ServerMK {
     public static Map<String, Bot> bots = new HashMap<>();
     public static Socket socket;
     public static boolean stopped = false;
-    public static boolean closed = true;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
@@ -56,7 +55,7 @@ public class ServerMK {
 
         LoggerMK.info("Server started successfully.");
 
-        ThreadsMK.initConnectionThread(PropertiesMK.controllerIp, PropertiesMK.port);
+        ThreadsMK.initConnectionThread();
     }
 
 
@@ -71,6 +70,6 @@ public class ServerMK {
         }
 
         LoggerMK.info("Server stopped correctly.");
-        Runtime.getRuntime().exit(0);
+        System.exit(0);
     }
 }

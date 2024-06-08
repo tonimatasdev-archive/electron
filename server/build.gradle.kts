@@ -21,3 +21,7 @@ tasks.shadowJar {
         )
     }
 }
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
+}

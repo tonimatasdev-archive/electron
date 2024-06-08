@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class ThreadsMK {
     public static void initConsoleThread() {
@@ -23,53 +24,52 @@ public class ThreadsMK {
         }).start();
     }
 
-    public static void initReceiveThread(String host, int port) {
+    public static void initReceiveThread() {
         new Thread(() -> {
-            while (!ServerMK.stopped && ServerMK.socket != null && ServerMK.closed) {
+            while (!ServerMK.stopped && ServerMK.socket != null) {
                 try {
                     DataInputStream in = new DataInputStream(ServerMK.socket.getInputStream());
                     TasksMK.runTask(in.readUTF());
                 } catch (IOException ignored) {
                     ServerMK.socket = null;
-                    if (ServerMK.closed) return;
-                    initConnectionThread(host, port);
+                    initConnectionThread();
                 }
             }
         }).start();
     }
 
-    public static void initConnectionThread(String host, int port) {
-        while (!ServerMK.stopped && ServerMK.socket == null && ServerMK.closed) {
+    public static void initConnectionThread() {
+        while (!ServerMK.stopped && ServerMK.socket == null) {
             try {
-                ServerMK.socket = new Socket(host, port);
-                DataInputStream allowed = new DataInputStream(ServerMK.socket.getInputStream());
+                Socket socket = new Socket(PropertiesMK.controllerIp, PropertiesMK.port);
+                DataInputStream allowed = new DataInputStream(socket.getInputStream());
 
                 if (!Boolean.parseBoolean(allowed.readUTF())) {
-                    TasksMK.handleSocketClose("Not allowed to connect to the controller " + PropertiesMK.controllerIp + ". Add this server ip to the allowed ips in the controller config.");
-                    return;
+                    LoggerMK.warn("Not allowed to connect to the controller " + PropertiesMK.controllerIp + ". Add this server ip to the allowed ips in the controller config.");
+                    throw new Exception();
                 }
 
-                NetworkMK.send(ServerMK.socket, PropertiesMK.token);
+                NetworkMK.send(socket, PropertiesMK.token);
                 LoggerMK.info("Checking token. Wait 5 seconds.");
-                DataInputStream token = new DataInputStream(ServerMK.socket.getInputStream());
+                DataInputStream token = new DataInputStream(socket.getInputStream());
 
                 if (!Boolean.parseBoolean(token.readUTF())) {
-                    TasksMK.handleSocketClose("Incorrect token to connect to the controller " + PropertiesMK.controllerIp + ".");
-                    return;
+                    LoggerMK.warn("Incorrect token to connect to the controller " + PropertiesMK.controllerIp + ".");
+                    throw new Exception();
                 }
-            } catch (IOException e) {
-                LoggerMK.error("Error on connect to the controller " + host + ":" + port + ". Next try in 30 seconds.");
 
+                ServerMK.socket = socket;
+                LoggerMK.info("Successfully connected to the controller " + PropertiesMK.controllerIp + ":" + PropertiesMK.port);
+                ThreadsMK.initReceiveThread();
+            } catch (Exception e) {
+                LoggerMK.error("Error on connect to the controller " + PropertiesMK.controllerIp + ":" + PropertiesMK.port + ". Next try in 30 seconds.");
+                
                 try {
-                    //noinspection BusyWait
-                    Thread.sleep(30 * 1000);
+                    TimeUnit.SECONDS.sleep(30);
                 } catch (InterruptedException exception) {
                     throw new RuntimeException(exception);
                 }
             }
         }
-
-        LoggerMK.info("Successfully connected to the controller " + host + ":" + port);
-        ThreadsMK.initReceiveThread(host, port);
     }
 }

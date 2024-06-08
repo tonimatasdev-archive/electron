@@ -1,6 +1,7 @@
 package dev.tonimatas.electron.console;
 
 import dev.tonimatas.electron.ServerMK;
+import dev.tonimatas.electron.threads.ThreadsMK;
 import dev.tonimatas.electron.utils.NetworkMK;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class TasksMK {
         switch (splitTask[0]) {
             case "test" -> handleExample(args);
             case "bot" -> handleBot(args);
+            case "controller-stop" -> handleControllerStop();
             default -> LoggerMK.error("Task \"" + splitTask[0] + "\" not found.");
         }
     }
@@ -45,17 +47,7 @@ public class TasksMK {
         }
     }
 
-    public static void handleSocketClose(String message) {
-        ServerMK.closed = false;
-
-        LoggerMK.error(message);
-
-        try {
-            ServerMK.socket.close();
-        } catch (IOException e) {
-            LoggerMK.error("Error on close the socket.");
-        }
-
-        LoggerMK.info("Restart the server for try again.");
+    public static void handleControllerStop() {
+        ThreadsMK.initConnectionThread();
     }
 }
