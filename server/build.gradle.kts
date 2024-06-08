@@ -12,12 +12,16 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveClassifier.set("all")
+    archiveClassifier.set("")
     mergeServiceFiles()
     
     manifest.attributes("Main-Class" to "dev.tonimatas.electron.ServerMK")
 }
 
-tasks.build {
+tasks.jar {
+    archiveClassifier.set("plain")
+}
+
+tasks.create("exportJar") {
     dependsOn(tasks.shadowJar)
 }

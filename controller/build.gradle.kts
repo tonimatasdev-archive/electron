@@ -22,3 +22,7 @@ application {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.create("exportJar") {
+    dependsOn(tasks.bootJar)
+}
