@@ -3,6 +3,7 @@ package dev.tonimatas.electron;
 import dev.tonimatas.electron.console.LoggerMK;
 import dev.tonimatas.electron.threads.ThreadsMK;
 import dev.tonimatas.electron.util.PropertiesMK;
+import dev.tonimatas.electron.utils.NetworkMK;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -45,6 +46,10 @@ public class ControllerMK {
     public static void stop() {
         stopped = true;
 
+        for (Socket socket : sockets) {
+            NetworkMK.send(socket, "controller-stop");
+        }
+        
         try {
             serverSocket.close();
         } catch (IOException e) {
