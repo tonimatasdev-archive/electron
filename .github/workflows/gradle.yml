@@ -15,13 +15,14 @@ jobs:
           java-version: 21
           distribution: temurin
 
-      - name: Give permissions to Gradle
-        run: chmod +x ./gradlew
+      
+        
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: chmod +x ./gradlew && ./gradlew exportJar
+          
 
-      - name: Upload a Build Artifacts
+      - name: Upload a the exported jars
         uses: actions/upload-artifact@v3.1.2
         with:
           name: Controller
