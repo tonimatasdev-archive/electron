@@ -52,5 +52,6 @@ public class ControllerMK {
         }
 
         LoggerMK.info("Controller stopped correctly.");
+        System.exit(0);
     }
 }
