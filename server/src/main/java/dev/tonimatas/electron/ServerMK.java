@@ -1,25 +1,22 @@
 package dev.tonimatas.electron;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import dev.tonimatas.electron.api.Bot;
+import dev.discordmk.quark.DiscordBot;
+import dev.discordmk.quark.reader.ReaderMK;
 import dev.tonimatas.electron.console.LoggerMK;
-import dev.tonimatas.electron.reader.ReaderMK;
 import dev.tonimatas.electron.threads.ThreadsMK;
 import dev.tonimatas.electron.util.PropertiesMK;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class ServerMK {
-    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    public static Map<String, Bot> bots = new HashMap<>();
     public static Socket socket;
     public static boolean stopped = false;
+    public static List<DiscordBot> bots = new ArrayList<>();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
@@ -40,8 +37,8 @@ public class ServerMK {
         } else {
             Arrays.stream(files).forEach(botFile -> new Thread(() -> {
                 try {
-                    Bot bot = new ReaderMK(botFile).build();
-                    bots.put(bot.getToken(), bot);
+                    DiscordBot bot = new ReaderMK(botFile).build();
+                    bots.add(bot);
                     LoggerMK.info("Loaded bot: " + botFile.getName());
                 } catch (Exception e) {
                     LoggerMK.error("Failed to load bot from file: " + botFile.getName());
@@ -61,7 +58,7 @@ public class ServerMK {
 
     public static void stop() {
         stopped = true;
-        bots.values().forEach(Bot::stop);
+        bots.forEach(DiscordBot::stop);
 
         try {
             socket.close();
