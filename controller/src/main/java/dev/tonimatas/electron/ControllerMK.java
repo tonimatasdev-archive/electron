@@ -20,6 +20,8 @@ public class ControllerMK {
     public static boolean stopped = false;
     
     public static void main(String[] args) {
+        long time = System.currentTimeMillis();
+
         try {
             PropertiesMK.load();
         } catch (IOException e) {
@@ -40,7 +42,7 @@ public class ControllerMK {
         ThreadsMK.initConsoleThread();
 
         SpringApplication.run(ControllerMK.class, args);
-        LoggerMK.info("Controller started successfully.");
+        LoggerMK.info("Controller started successfully. Done (" + (float) ((System.currentTimeMillis() - time) / 1000) + ")!");
     }
 
     public static void stop() {

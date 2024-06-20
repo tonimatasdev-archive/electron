@@ -20,6 +20,8 @@ public class ServerMK {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
+        long time = System.currentTimeMillis();
+        
         try {
             PropertiesMK.load();
         } catch (IOException e) {
@@ -50,7 +52,7 @@ public class ServerMK {
 
         ThreadsMK.initConsoleThread();
 
-        LoggerMK.info("Server started successfully.");
+        LoggerMK.info("Server started successfully. Done (" + (float) ((System.currentTimeMillis() - time) / 1000) + ")!");
 
         ThreadsMK.initConnectionThread();
     }
