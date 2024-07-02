@@ -1,7 +1,7 @@
 package dev.tonimatas.electron.console;
 
 import dev.tonimatas.electron.ServerMK;
-import dev.tonimatas.electron.utils.NetworkMK;
+import dev.tonimatas.electron.util.NetworkMK;
 
 public class CommandsMK {
     public static void runCommand(String command) {
