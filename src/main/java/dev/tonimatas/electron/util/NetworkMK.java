@@ -1,9 +1,8 @@
-package dev.tonimatas.electron.utils;
+package dev.tonimatas.electron.util;
 
 import dev.tonimatas.electron.console.LoggerMK;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class NetworkMK {
@@ -14,9 +13,11 @@ public class NetworkMK {
         }
 
         try {
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF(message);
-            out.flush();
+            OutputStream output = socket.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+            writer.write(message);
+            writer.newLine();
+            writer.flush();
             return true;
         } catch (IOException e) {
             LoggerMK.error("Error on send the message to " + socket.getInetAddress());
